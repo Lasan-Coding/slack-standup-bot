@@ -63,3 +63,6 @@ Project-specific additions:
 - Update `DECISIONS.md` whenever a real trade-off is made. Prompt me if I forget.
 - Deliberate failure testing is part of the project, not a distraction. When I
   break something on purpose, help me read the error rather than just fixing it.
+- Remind me to commit at natural checkpoints — end of a verified build-order
+  step, after a schema change, before starting something risky. Not after
+  every small edit.
