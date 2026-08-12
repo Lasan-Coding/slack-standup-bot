@@ -66,3 +66,6 @@ Project-specific additions:
 - Remind me to commit at natural checkpoints — end of a verified build-order
   step, after a schema change, before starting something risky. Not after
   every small edit.
+- Update `LEARNING.md` (private, gitignored) whenever a new technical
+  concept gets explained — a few plain-language lines, not a transcript.
+  It's my study aid for remembering this well enough later.
