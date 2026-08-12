@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-with open("schema.sql") as f:
+with open("admin/schema.sql") as f:
     schema = f.read()
 
 conn = psycopg.connect(os.environ["DATABASE_URL"])
