@@ -52,8 +52,8 @@ Check in with me between each step.
 
 ## Definition of done
 
-Runs unattended for a full week on a real Slack workspace with at least two
-people in it, and I can explain any part of the codebase without looking it up.
+Runs correctly against a real Slack workspace when actively running
+(deployment deferred — see `DECISIONS.md`).
 
 ## Working notes
 

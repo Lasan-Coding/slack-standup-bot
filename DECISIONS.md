@@ -19,3 +19,7 @@ one digest ([Daily Sync](https://help.geekbot.com/en/articles/7041480-daily-sync
 a different product shape than what's scoped here, and arguably the better solution. Per-member timezone-aware
 prompting is unaffected and still fully built; only the digest's single post
 time carries this limitation.
+
+## 2026-08-13 — Real deployment deferred to a future iteration
+Free hosting for a persistent, always-on process doesn't fit this project's
+current constraints — revisit later, possibly self-hosted.
