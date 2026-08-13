@@ -1,0 +1,75 @@
+<svg viewBox="0 0 1040 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Slack and Postgres both connect to bot.py. bot.py posts DMs and digests to Slack and receives events from Slack via Socket Mode. bot.py reads and writes members, responses, and digest_log in Postgres. Separately, one-off admin scripts write directly to Postgres.">
+  <style>
+    .box-fill { fill: #ffffff; }
+    .box-line { stroke: #d8dbe0; fill: none; }
+    .ink-line { stroke: #5b616b; fill: none; }
+    .ink-text { fill: #1a1d23; }
+    .soft-text { fill: #5b616b; }
+    .mono-text { font-family: ui-monospace, "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    text { font-family: "Segoe UI", ui-sans-serif, system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif; }
+    .accent-line { stroke: #3457d5; fill: none; }
+    .accent-text { fill: #3457d5; }
+    .dashed { stroke-dasharray: 5 5; }
+
+    @media (prefers-color-scheme: dark) {
+      .box-fill { fill: #1b1e24; }
+      .box-line { stroke: #333844; }
+      .ink-line { stroke: #9aa1ac; }
+      .ink-text { fill: #ecedf0; }
+      .soft-text { fill: #9aa1ac; }
+      .accent-line { stroke: #7c96ff; }
+      .accent-text { fill: #7c96ff; }
+    }
+  </style>
+
+  <defs>
+    <marker id="arr-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="accent-text" />
+    </marker>
+    <marker id="arr-soft" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="soft-text" />
+    </marker>
+  </defs>
+
+  <!-- Slack -->
+  <rect x="40" y="30" width="200" height="220" rx="10" class="box-fill box-line" />
+  <text x="140" y="128" text-anchor="middle" font-size="17" font-weight="700" class="ink-text">Slack</text>
+  <text x="140" y="150" text-anchor="middle" font-size="11.5" class="soft-text">team workspace</text>
+
+  <!-- bot.py -->
+  <rect x="420" y="30" width="220" height="220" rx="10" class="box-fill box-line" />
+  <text x="530" y="60" text-anchor="middle" font-size="15" font-weight="700" class="ink-text mono-text">bot.py</text>
+  <line x1="436" y1="76" x2="624" y2="76" class="box-line" />
+  <text x="530" y="100" text-anchor="middle" font-size="12.5" font-weight="600" class="ink-text">Socket Mode listener</text>
+  <text x="530" y="117" text-anchor="middle" font-size="10.5" class="soft-text">receives modal submissions</text>
+  <line x1="436" y1="135" x2="624" y2="135" class="box-line" />
+  <text x="530" y="159" text-anchor="middle" font-size="12.5" font-weight="600" class="ink-text">APScheduler timer</text>
+  <text x="530" y="176" text-anchor="middle" font-size="10.5" class="soft-text">wakes every 5 min, checks</text>
+  <text x="530" y="191" text-anchor="middle" font-size="10.5" class="soft-text">each member's local time</text>
+
+  <!-- Postgres -->
+  <rect x="800" y="30" width="200" height="220" rx="10" class="box-fill box-line" />
+  <text x="900" y="108" text-anchor="middle" font-size="16" font-weight="700" class="ink-text">Postgres</text>
+  <text x="900" y="133" text-anchor="middle" font-size="11" class="soft-text mono-text">members</text>
+  <text x="900" y="150" text-anchor="middle" font-size="11" class="soft-text mono-text">responses</text>
+  <text x="900" y="167" text-anchor="middle" font-size="11" class="soft-text mono-text">digest_log</text>
+
+  <!-- Slack <-> bot.py -->
+  <line x1="420" y1="80" x2="240" y2="80" class="accent-line" stroke-width="2" marker-end="url(#arr-accent)" />
+  <text x="330" y="70" text-anchor="middle" font-size="11" class="accent-text">posts DMs &amp; digest</text>
+
+  <line x1="240" y1="200" x2="420" y2="200" class="accent-line" stroke-width="2" marker-end="url(#arr-accent)" />
+  <text x="330" y="220" text-anchor="middle" font-size="11" class="accent-text">delivers events (Socket Mode)</text>
+
+  <!-- bot.py <-> Postgres -->
+  <line x1="640" y1="140" x2="800" y2="140" class="accent-line" stroke-width="2" marker-end="url(#arr-accent)" marker-start="url(#arr-accent)" />
+  <text x="720" y="126" text-anchor="middle" font-size="11" class="accent-text">reads &amp; writes</text>
+
+  <!-- Admin scripts -->
+  <rect x="420" y="310" width="220" height="70" rx="10" class="box-fill box-line" />
+  <text x="530" y="338" text-anchor="middle" font-size="13" font-weight="700" class="ink-text mono-text">admin/*.py</text>
+  <text x="530" y="356" text-anchor="middle" font-size="10" class="soft-text mono-text">register_member.py · create_tables.py</text>
+
+  <path d="M640,325 C 740,325 760,280 800,225" class="ink-line dashed" stroke-width="1.6" marker-end="url(#arr-soft)" />
+  <text x="790" y="295" text-anchor="middle" font-size="10.5" class="soft-text">one-off, run by hand</text>
+</svg>

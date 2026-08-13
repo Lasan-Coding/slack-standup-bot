@@ -14,12 +14,37 @@ digest to a team channel.
   also listing anyone who hasn't responded yet.
 - No digest is posted if nobody has responded.
 
+## Screenshots
+
+Each weekday morning, a member gets prompted in Slack:
+
+![DM prompting a team member to fill in their standup](screenshots/prompt.png)
+
+Clicking through opens a modal to answer the three questions:
+
+![Modal with Yesterday, Today, and Blockers fields](screenshots/modal.png)
+
+Later, the digest is posted to the team channel:
+
+![Digest message showing one member's yesterday, today, and blockers](screenshots/digest.png)
+
 ## Tech stack
 
 - Python
 - Postgres (via Supabase)
 - `slack_bolt` / `slack_sdk` (Socket Mode – no public server required)
 - `APScheduler` for timezone-aware scheduling
+
+## Architecture
+
+![Architecture diagram: Slack and Postgres both connect to bot.py, which posts DMs and digests to Slack, receives events back via Socket Mode, and reads/writes members, responses, and digest_log in Postgres. A separate admin/*.py path writes to Postgres directly, run by hand, not part of the always-on loop.](screenshots/architecture.svg)
+
+Blue is the always-on loop: Slack and `bot.py` stay connected over Socket Mode
+so Slack can push events in without `bot.py` needing a public address; an
+`APScheduler` timer inside the same process wakes up every 5 minutes to check
+whether it's 9am yet for any given member. Grey dashed is a different kind of
+path – the admin scripts talk to Postgres directly, run once by hand when
+setting up or registering someone, never while the bot is live.
 
 ## Status
 
