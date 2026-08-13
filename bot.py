@@ -1,13 +1,74 @@
 import os
+from datetime import datetime, time
+from zoneinfo import ZoneInfo
 
 import psycopg
+from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
+from actions import generate_and_post_digest, send_questions_to_member
+
 load_dotenv()
 
 app = App(token=os.environ["SLACK_BOT_TOKEN"])
+
+DIGEST_TIMEZONE = "Europe/Berlin"
+
+
+def check_and_send_questions():
+    conn = psycopg.connect(os.environ["DATABASE_URL"])
+    members = conn.execute(
+        "SELECT slack_user_id, timezone, last_prompted_date"
+        " FROM members WHERE active = true"
+    ).fetchall()
+
+    for slack_user_id, member_timezone, last_prompted_date in members:
+        now_local = datetime.now(ZoneInfo(member_timezone))
+        is_due = now_local.time() >= time(9, 0)
+        already_sent = last_prompted_date == now_local.date()
+
+        if is_due and not already_sent:
+            success = send_questions_to_member(app.client, slack_user_id)
+            if success:
+                conn.execute(
+                    "UPDATE members SET last_prompted_date = %s"
+                    " WHERE slack_user_id = %s",
+                    (now_local.date(), slack_user_id),
+                )
+                conn.commit()
+
+    conn.close()
+
+
+def check_and_post_digest():
+    now_berlin = datetime.now(ZoneInfo(DIGEST_TIMEZONE))
+    if now_berlin.time() < time(10, 30):
+        return
+
+    conn = psycopg.connect(os.environ["DATABASE_URL"])
+    already_posted = conn.execute(
+        "SELECT 1 FROM digest_log WHERE posted_date = %s", (now_berlin.date(),)
+    ).fetchone()
+
+    if not already_posted:
+        success = generate_and_post_digest(
+            app.client, conn, os.environ["SLACK_CHANNEL_ID"]
+        )
+        if success:
+            conn.execute(
+                "INSERT INTO digest_log (posted_date) VALUES (%s)",
+                (now_berlin.date(),),
+            )
+            conn.commit()
+
+    conn.close()
+
+
+def run_scheduled_checks():
+    check_and_send_questions()
+    check_and_post_digest()
 
 
 @app.action("open_standup_modal")
@@ -86,6 +147,10 @@ def handle_submission(ack, body, view):
 
 
 if __name__ == "__main__":
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(run_scheduled_checks, "interval", minutes=5, next_run_time=datetime.now())
+    scheduler.start()
+
     handler = SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"])
     print("Bot is listening. Ctrl+C to stop.")
     handler.start()
