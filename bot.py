@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-from actions import generate_and_post_digest, send_questions_to_member
+from actions import PROMPT_HOUR, generate_and_post_digest, send_questions_to_member
 
 load_dotenv()
 
@@ -26,7 +26,7 @@ def check_and_send_questions():
 
     for slack_user_id, member_timezone, last_prompted_date in members:
         now_local = datetime.now(ZoneInfo(member_timezone))
-        is_due = now_local.time() >= time(9, 0)
+        is_due = now_local.time() >= PROMPT_HOUR
         already_sent = last_prompted_date == now_local.date()
 
         if is_due and not already_sent:
@@ -116,7 +116,6 @@ def open_modal(ack, body, client):
 
 @app.view("standup_submission")
 def handle_submission(ack, body, view):
-    ack()
     values = view["state"]["values"]
     yesterday = values["yesterday_block"]["yesterday_input"]["value"]
     today = values["today_block"]["today_input"]["value"]
@@ -124,10 +123,17 @@ def handle_submission(ack, body, view):
     slack_user_id = body["user"]["id"]
 
     conn = psycopg.connect(os.environ["DATABASE_URL"])
-    member_id = conn.execute(
+    row = conn.execute(
         "SELECT id FROM members WHERE slack_user_id = %s", (slack_user_id,)
-    ).fetchone()[0]
+    ).fetchone()
 
+    if row is None:
+        conn.close()
+        print("Submission from unregistered member:", slack_user_id)
+        ack()
+        return
+
+    member_id = row[0]
     conn.execute(
         """
         INSERT INTO responses (member_id, standup_date, yesterday, today, blockers)
@@ -143,6 +149,7 @@ def handle_submission(ack, body, view):
     )
     conn.commit()
     conn.close()
+    ack()
     print("Response stored for", slack_user_id)
 
 
