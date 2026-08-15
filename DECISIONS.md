@@ -23,3 +23,19 @@ time carries this limitation.
 ## 2026-08-13 – Real deployment deferred to a future iteration
 Free hosting for a persistent, always-on process doesn't fit this project's
 current constraints – revisit later, possibly self-hosted.
+
+## 2026-08-15 – Oracle Cloud attempt abandoned; deployment stays deferred, Docker/CI added anyway
+Oracle was the only host found offering a persistent free VM with no
+ongoing cost. Its signup
+process failed repeatedly with a generic, unresolvable "unable to
+complete your sign up" error – a known issue on Oracle's side with no
+documented fix. Rather than continue troubleshooting a third-party black
+box indefinitely, decided to stop and focus on the parts of the goal that
+were still fully achievable.
+
+Containerized the app with Docker and added CI (GitHub Actions builds and
+publishes the image to GitHub Container Registry on push to `main`) –
+both real, verifiable skills independent of hosting. Live hosting stays
+deferred; the
+two paths to close it out later are a low-cost VPS (a few
+euros/month, no free-tier friction) or going with a time-boxed free trial.

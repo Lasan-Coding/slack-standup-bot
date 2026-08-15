@@ -32,7 +32,9 @@ That is the entire product.
 
 - Python
 - Postgres (chosen over SQLite deliberately, as a learning goal — see DECISIONS.md)
-- Deployed to a free-tier host
+- Docker (containerized, no live hosting — see DECISIONS.md)
+- GitHub Actions for CI — builds the Docker image and publishes it to
+  GitHub Container Registry on push to main
 - Secrets via environment variables
 
 ## Build order
@@ -48,12 +50,22 @@ Check in with me between each step.
 7. Scheduling and timezones
 8. Failure handling and edge cases
 9. Deploy
+   - 9a. ~~Oracle Cloud Always Free VM~~ — abandoned, see DECISIONS.md
+   - 9b. App containerized with Docker; runs correctly via `docker run` locally
+   - 9c. GitHub Actions workflow builds the Docker image and publishes it
+     to GitHub Container Registry on push to `main`
+   - 9d. Live hosting deferred — no VM to deploy the image to right now
 10. README, including the decisions log
+
+Note: step 10 was already completed once, while deployment was still
+deferred. Steps 9b–9c are being done after the fact — README needs a
+small update once they're verified working.
 
 ## Definition of done
 
 Runs correctly against a real Slack workspace when actively running
-(deployment deferred — see `DECISIONS.md`).
+locally or via `docker run`. Live, unattended cloud hosting is deferred —
+see `DECISIONS.md`.
 
 ## Working notes
 
