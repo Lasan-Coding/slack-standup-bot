@@ -16,7 +16,7 @@ digest to a team channel.
 
 ## Screenshots
 
-Each weekday morning, standup particpants get prompted in Slack:
+Each weekday morning, standup participants get prompted in Slack:
 
 ![DM prompting a team member to fill in their standup](screenshots/prompt.png)
 
@@ -44,8 +44,11 @@ digest correctly:
 
 - Python
 - Postgres (via Supabase)
-- `slack_bolt` / `slack_sdk` (Socket Mode – no public server required)
+- `slack_bolt` / `slack_sdk` (Socket Mode)
 - `APScheduler` for timezone-aware scheduling
+- Docker – containerized app, verified running on Railway
+- GitHub Actions – builds and publishes the image to GitHub Container
+  Registry (GHCR) on every push
 
 ## Architecture
 
@@ -83,6 +86,15 @@ locally, or via `docker run`, when actively started.
 6. Register a member: `./venv/Scripts/python admin/register_member.py <slack_user_id>`
 7. Run the bot: `./venv/Scripts/python bot.py`
 
+Alternatively, once `.env` is set up (step 3) and the schema exists
+(step 5), skip the venv and run via Docker instead – this replaces
+steps 4 and 7, same app, packaged and run as a container rather than
+directly with your local Python:
+```
+docker build -t standup-bot .
+docker run --env-file .env standup-bot
+```
+
 ## How this was built
 
 Built with Claude as a technical collaborator – I directed scope and
@@ -97,6 +109,11 @@ exercise, not because nothing like it exists.
 
 ## Technical concepts
 
+- **Containerization** – packaging the app with Docker (Dockerfile, image
+  layers, image vs. running container)
+- **CI/CD pipelines** – GitHub Actions building and publishing a Docker
+  image to a registry (GHCR) on every push
+- **Cloud deployment** – verified running on a managed host (Railway)
 - **OAuth & scoped permissions** – Slack app authentication via bot/app-level
   tokens, incrementally requesting new scopes as functionality grew
 - **Real-time event handling** – Socket Mode for receiving Slack events
@@ -106,8 +123,7 @@ exercise, not because nothing like it exists.
 - **SQL injection prevention** – parameterized queries throughout
 - **Timezone-aware scheduling** – IANA region names rather than fixed
   offsets, per-member local-time prompts
-- **Scheduling architecture** – in-process scheduler (`APScheduler`) vs.
-  OS-level cron
+- **Scheduling architecture** – in-process scheduler (`APScheduler`)
 
 ## Decisions log
 
