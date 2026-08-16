@@ -159,5 +159,5 @@ if __name__ == "__main__":
     scheduler.start()
 
     handler = SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"])
-    print("Bot is listening (v2). Ctrl+C to stop.")
+    print("Bot is listening. Ctrl+C to stop.")
     handler.start()

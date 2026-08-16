@@ -16,7 +16,7 @@ digest to a team channel.
 
 ## Screenshots
 
-Each weekday morning, a member gets prompted in Slack:
+Each weekday morning, standup particpants get prompted in Slack:
 
 ![DM prompting a team member to fill in their standup](screenshots/prompt.png)
 
@@ -26,7 +26,19 @@ Clicking through opens a modal to answer the three questions:
 
 Later, the digest is posted to the team channel:
 
-![Digest message showing one member's yesterday, today, and blockers](screenshots/digest.png)
+![Digest message showing one member's yesterday, today, and blockers](screenshots/railway-digest.png)
+
+*Jordan Lee, Sam Okafor, and non-responder Taylor Kim are seeded sample
+data, added to illustrate a fuller team – only the first reply is real
+usage.*
+
+-------
+
+Also verified running on a real cloud host, not just locally – deployed via
+Docker to Railway, where it prompted, collected a response, and posted a
+digest correctly:
+
+![Railway deploy logs showing the container starting, sending a prompt, and posting a digest](screenshots/railway-deploy-logs.png)
 
 ## Tech stack
 
@@ -49,9 +61,11 @@ setting up or registering someone, never while the bot is live.
 ## Status
 
 Built and tested against a real Slack workspace, including real per-member
-timezone-aware prompts and a scheduled digest. Deployment (running
-unattended, continuously) is deferred – see `DECISIONS.md`. Currently it
-runs locally, when actively started.
+timezone-aware prompts and a scheduled digest. Also verified running
+correctly on a cloud host (Railway, via Docker) – prompted, collected a
+response, and posted a digest from there. Not kept running continuously
+past that verification – see `DECISIONS.md` for the reasoning. Runs
+locally, or via `docker run`, when actively started.
 
 ## Running your own instance
 

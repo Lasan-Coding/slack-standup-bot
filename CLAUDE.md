@@ -32,7 +32,7 @@ That is the entire product.
 
 - Python
 - Postgres (chosen over SQLite deliberately, as a learning goal — see DECISIONS.md)
-- Docker (containerized, no live hosting — see DECISIONS.md)
+- Docker (containerized; verified on Railway, not kept running continuously — see DECISIONS.md)
 - GitHub Actions for CI — builds the Docker image and publishes it to
   GitHub Container Registry on push to main
 - Secrets via environment variables
@@ -54,18 +54,17 @@ Check in with me between each step.
    - 9b. App containerized with Docker; runs correctly via `docker run` locally
    - 9c. GitHub Actions workflow builds the Docker image and publishes it
      to GitHub Container Registry on push to `main`
-   - 9d. Live hosting deferred — no VM to deploy the image to right now
+   - 9d. Verified working on Railway (a real cloud host) — prompted,
+     collected a response, posted a digest correctly; torn down
+     afterward rather than kept running continuously, see DECISIONS.md
 10. README, including the decisions log
-
-Note: step 10 was already completed once, while deployment was still
-deferred. Steps 9b–9c are being done after the fact — README needs a
-small update once they're verified working.
 
 ## Definition of done
 
-Runs correctly against a real Slack workspace when actively running
-locally or via `docker run`. Live, unattended cloud hosting is deferred —
-see `DECISIONS.md`.
+Runs correctly against a real Slack workspace when actively running —
+locally, via `docker run`, or on a cloud host (verified on Railway).
+Continuous, unattended hosting is a deliberate choice not to maintain
+right now, not an unverified capability — see `DECISIONS.md`.
 
 ## Working notes
 

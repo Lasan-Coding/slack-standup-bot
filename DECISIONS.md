@@ -39,3 +39,14 @@ both real, verifiable skills independent of hosting. Live hosting stays
 deferred; the
 two paths to close it out later are a low-cost VPS (a few
 euros/month, no free-tier friction) or going with a time-boxed free trial.
+
+## 2026-08-16 – Deployment verified on Railway, not kept running continuously
+Deployed the Docker image to Railway (free trial, no card) to confirm the
+whole pipeline actually works end to end – it built, started, prompted a
+member over Slack, collected a response, and posted a digest correctly.
+See the Railway screenshots in the README.
+
+Chose not to keep it running past that verification – continuous hosting
+isn't something this portfolio demo needs by default. The capability is
+demonstrated and documented; live hosting remains a "when it's actually
+needed" decision.
