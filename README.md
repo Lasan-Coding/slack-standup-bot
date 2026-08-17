@@ -40,6 +40,9 @@ digest correctly:
 
 ![Railway deploy logs showing the container starting, sending a prompt, and posting a digest](screenshots/railway-deploy-logs.png)
 
+*A Slack user ID (an internal identifier, not a name) is blurred out of
+the log lines.*
+
 ## Tech stack
 
 - Python
